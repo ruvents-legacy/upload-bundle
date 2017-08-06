@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\File\File;
  * @ORM\Table("upload")
  * @ORM\Entity(readOnly=true)
  * @ORM\EntityListeners({"Ruvents\UploadBundle\EntityListener\UploadListener"})
- * @ORM\InheritanceType("SINGLE_TABLE")
  */
 class Upload
 {
