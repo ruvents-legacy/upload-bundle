@@ -35,13 +35,24 @@ class UploadListener
         $metadata = $event->getEntityManager()->getClassMetadata(Upload::class);
 
         $file = $upload->getFile();
-        $name = bin2hex(random_bytes(20)).'.'.$file->guessExtension();
+        $extension = $file->guessExtension();
+        $name = bin2hex(random_bytes(20)).(empty($extension) ? '' : '.'.$extension);
+        $directory = $this->webDir.'/'.$this->uploadsDir.'/'.substr($name, 0, 2);
+        $name = substr($name, 2);
 
         if ($file instanceof UploadedFile) {
-            $file = $file->move($this->webDir.'/'.$this->uploadsDir, $name);
+            $file = $file->move($directory, $name);
         } else {
             $source = $upload->getFile()->getPathname();
-            $target = $this->webDir.'/'.$this->uploadsDir.'/'.$name;
+            $target = $directory.'/'.$name;
+
+            if (!is_dir($directory)) {
+                if (false === @mkdir($directory, 0777, true) && !is_dir($directory)) {
+                    throw new FileException(sprintf('Unable to create the "%s" directory.', $directory));
+                }
+            } elseif (!is_writable($directory)) {
+                throw new FileException(sprintf('Unable to write in the "%s" directory.', $directory));
+            }
 
             if (!@copy($source, $target)) {
                 throw new FileException(sprintf(
