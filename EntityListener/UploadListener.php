@@ -3,7 +3,7 @@
 namespace Ruvents\UploadBundle\EntityListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Ruvents\UploadBundle\Entity\Upload;
+use Ruvents\UploadBundle\Entity\AbstractUpload;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -30,9 +30,9 @@ class UploadListener
         $this->uploadsDir = $uploadsDir;
     }
 
-    public function prePersist(Upload $upload, LifecycleEventArgs $event)
+    public function prePersist(AbstractUpload $upload, LifecycleEventArgs $event)
     {
-        $metadata = $event->getEntityManager()->getClassMetadata(Upload::class);
+        $metadata = $event->getEntityManager()->getClassMetadata(AbstractUpload::class);
 
         $file = $upload->getFile();
         $extension = $file->guessExtension();
@@ -68,10 +68,10 @@ class UploadListener
         $metadata->setFieldValue($upload, 'id', $this->uploadsDir.'/'.$name);
     }
 
-    public function postLoad(Upload $upload, LifecycleEventArgs $event)
+    public function postLoad(AbstractUpload $upload, LifecycleEventArgs $event)
     {
         $reflection = $event->getEntityManager()
-            ->getClassMetadata(Upload::class)
+            ->getClassMetadata(AbstractUpload::class)
             ->getReflectionClass();
 
         $file = new File($this->webDir.'/'.$upload->getId(), false);
@@ -79,12 +79,12 @@ class UploadListener
         $this->setFile($upload, $file, $reflection);
     }
 
-    public function preRemove(Upload $upload)
+    public function preRemove(AbstractUpload $upload)
     {
         @unlink($upload->getFile()->getPathname());
     }
 
-    private function setFile(Upload $upload, File $file, \ReflectionClass $reflection = null)
+    private function setFile(AbstractUpload $upload, File $file, \ReflectionClass $reflection)
     {
         $property = $reflection->getProperty('file');
         $property->setAccessible(true);

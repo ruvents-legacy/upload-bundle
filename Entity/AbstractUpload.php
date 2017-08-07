@@ -6,11 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
- * @ORM\Table("upload")
- * @ORM\Entity(readOnly=true)
+ * @ORM\MappedSuperclass()
  * @ORM\EntityListeners({"Ruvents\UploadBundle\EntityListener\UploadListener"})
  */
-class Upload
+abstract class AbstractUpload
 {
     /**
      * @ORM\Column(type="string", name="id")

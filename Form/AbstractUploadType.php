@@ -2,15 +2,16 @@
 
 namespace Ruvents\UploadBundle\Form;
 
-use Ruvents\UploadBundle\Entity\Upload;
+use Ruvents\UploadBundle\Entity\AbstractUpload;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UploadType extends AbstractType implements DataMapperInterface
+abstract class AbstractUploadType extends AbstractType implements DataMapperInterface
 {
     /**
      * {@inheritdoc}
@@ -31,7 +32,7 @@ class UploadType extends AbstractType implements DataMapperInterface
     {
         $resolver
             ->setDefaults([
-                'data_class' => Upload::class,
+                'data_class' => AbstractUpload::class,
                 'error_bubbling' => false,
             ]);
     }
@@ -51,8 +52,18 @@ class UploadType extends AbstractType implements DataMapperInterface
         /** @var FormInterface $fileForm */
         $fileForm = iterator_to_array($forms)['file'];
 
-        if (!$fileForm->isEmpty()) {
-            $data = new Upload($fileForm->getData());
+        if (!$fileForm->isEmpty()
+            && $fileForm->isSubmitted()
+            && $fileForm->isSynchronized()
+        ) {
+            $data = $this->createUpload($fileForm->getData());
         }
     }
+
+    /**
+     * @param string|File $file
+     *
+     * @return AbstractUpload
+     */
+    abstract protected function createUpload($file);
 }
