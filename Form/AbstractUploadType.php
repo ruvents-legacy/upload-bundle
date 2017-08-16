@@ -33,6 +33,7 @@ abstract class AbstractUploadType extends AbstractType implements DataMapperInte
         $resolver
             ->setDefaults([
                 'data_class' => AbstractUpload::class,
+                'empty_data' => null,
                 'error_bubbling' => false,
             ]);
     }
