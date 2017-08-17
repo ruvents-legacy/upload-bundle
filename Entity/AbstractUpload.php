@@ -3,6 +3,7 @@
 namespace Ruvents\UploadBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -44,6 +45,26 @@ abstract class AbstractUpload
         }
 
         throw new \InvalidArgumentException('Argument $file must be a string.');
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return static
+     * @throws FileException
+     */
+    public static function fromUrl($url)
+    {
+        $target = rtrim(sys_get_temp_dir(), '/\\').DIRECTORY_SEPARATOR.sha1($url);
+
+        if (!@copy($url, $target)) {
+            throw new FileException(sprintf(
+                'Could not copy the file "%s" to "%s" (%s).',
+                $url, $target, strip_tags(error_get_last()['message'])
+            ));
+        }
+
+        return new static($target);
     }
 
     public function __toString()

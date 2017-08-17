@@ -58,7 +58,7 @@ class UploadListener
 
             if (!@copy($source, $target)) {
                 throw new FileException(sprintf(
-                    'Could not copy the file "%s" to "%s" (%s)',
+                    'Could not copy the file "%s" to "%s" (%s).',
                     $source, $target, strip_tags(error_get_last()['message'])
                 ));
             }
