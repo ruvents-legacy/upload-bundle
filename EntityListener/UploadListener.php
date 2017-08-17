@@ -33,11 +33,13 @@ class UploadListener
     public function prePersist(AbstractUpload $upload, LifecycleEventArgs $event)
     {
         $metadata = $event->getEntityManager()->getClassMetadata(AbstractUpload::class);
-
         $file = $upload->getFile();
+
         $extension = $file->guessExtension();
         $name = bin2hex(random_bytes(20)).(empty($extension) ? '' : '.'.$extension);
-        $directory = $this->webDir.'/'.$this->uploadsDir.'/'.substr($name, 0, 2);
+
+        $subDirectory = $this->uploadsDir.'/'.substr($name, 0, 2);
+        $directory = $this->webDir.'/'.$subDirectory;
         $name = substr($name, 2);
 
         if ($file instanceof UploadedFile) {
@@ -65,7 +67,7 @@ class UploadListener
         }
 
         $this->setFile($upload, $file, $metadata->getReflectionClass());
-        $metadata->setFieldValue($upload, 'id', $this->uploadsDir.'/'.$name);
+        $metadata->setFieldValue($upload, 'id', $subDirectory.'/'.$name);
     }
 
     public function postLoad(AbstractUpload $upload, LifecycleEventArgs $event)
