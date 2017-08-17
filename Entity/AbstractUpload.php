@@ -65,6 +65,15 @@ abstract class AbstractUpload
     }
 
     /**
+     * @return string
+     * @throws \RuntimeException
+     */
+    public function getAssetPath()
+    {
+        return $this->getId();
+    }
+
+    /**
      * @return File
      */
     public function getFile()
