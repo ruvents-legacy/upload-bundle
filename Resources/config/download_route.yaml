@@ -1,0 +1,6 @@
+ruvents_upload_download:
+    path: /{path}
+    defaults:
+        _controller: Ruvents\UploadBundle\Controller\DownloadController
+    requirements:
+        path: '[a-zA-Z./-_]*'

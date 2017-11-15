@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Ruvents\UploadBundle\Entity;
 
@@ -8,22 +9,25 @@ use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\MappedSuperclass()
- * @ORM\EntityListeners({"Ruvents\UploadBundle\EntityListener\UploadListener"})
  */
 abstract class AbstractUpload
 {
     /**
-     * @ORM\Column(type="string", name="id")
+     * @ORM\Column(name="id", type="string")
      * @ORM\Id()
-     *
-     * @var string
      */
-    private $id;
+    private $path = '';
 
     /**
-     * @var File
+     * @ORM\Column(type="string", nullable=true)
+     *
+     * @var null|string
      */
+    private $clientName;
+
     private $file;
+
+    private $url = '';
 
     /**
      * @param string|object|File $file
@@ -44,7 +48,7 @@ abstract class AbstractUpload
             return;
         }
 
-        throw new \InvalidArgumentException('Argument $file must be a string.');
+        throw new \InvalidArgumentException(sprintf('File must be a string, an instance of %s or an object with __toString method.', File::class));
     }
 
     /**
@@ -67,38 +71,28 @@ abstract class AbstractUpload
         return new static($target);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return (string)$this->file;
+        return $this->path;
     }
 
-    /**
-     * @return string
-     * @throws \RuntimeException
-     */
-    public function getId()
+    public function getPath(): string
     {
-        if (null === $this->id) {
-            throw new \RuntimeException('You should not access the id property on a non-managed entity.');
-        }
-
-        return $this->id;
+        return $this->path;
     }
 
-    /**
-     * @return string
-     * @throws \RuntimeException
-     */
-    public function getAssetPath()
+    public function getClientName(): ?string
     {
-        return $this->getId();
+        return $this->clientName;
     }
 
-    /**
-     * @return File
-     */
-    public function getFile()
+    public function getFile(): File
     {
         return $this->file;
+    }
+
+    public function getUrl(): string
+    {
+        return $this->url;
     }
 }
