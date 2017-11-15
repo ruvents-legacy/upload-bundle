@@ -15,7 +15,7 @@ ruvents_upload:
     uploads_dir: "uploads"
 ```
 
-## API
+## Usage
 
 ```php
 <?php
