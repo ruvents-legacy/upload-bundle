@@ -2,34 +2,58 @@
 
 This bundle provides an immutable upload entity implementation.
 
-## Configuration
+## Installation
 
-```yaml
-ruvents_upload:
-    # required
-    # an Entity, extending from Ruvents\UploadBundle\Entity\AbstractUpload
-    entity: App\Entity\Upload
+`composer require ruvents/upload-bundle`.
+
+## Getting started
+
+1. Create your upload entity.
+    ```php
+    <?php
     
-    # defaults
-    web_dir: "%kernel.project_dir%/public"
-    uploads_dir: "uploads"
-```
+    namespace App\Entity;
+    
+    use Doctrine\ORM\Mapping as ORM;
+    use Ruvents\UploadBundle\Entity\AbstractUpload;
+    
+    /**
+     * @ORM\Entity()
+     */
+    class Upload extends AbstractUpload
+    {
+    }
+   ```
 
-## Usage
+1. Create the corresponding form type.
+    ```php
+    <?php
+    
+    namespace App\Form\Type;
+    
+    use App\Entity\Upload;
+    use Ruvents\UploadBundle\Entity\AbstractUpload;
+    use Ruvents\UploadBundle\Form\Type\AbstractUploadType;
+    
+    class UploadType extends AbstractUploadType
+    {
+        /**
+         * {@inheritdoc}
+         */
+        protected function createUpload($file): AbstractUpload
+        {
+            return new Upload($file);
+        }
+    }
+    ```
+
+## Basic usage
 
 ```php
 <?php
 
+use App\Entity\Upload;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping as ORM;
-use Ruvents\UploadBundle\Entity\AbstractUpload;
-
-/**
- * @ORM\Entity()
- */
-class Upload extends AbstractUpload
-{
-}
 
 $upload = new Upload('path/to/file' /** or File instance */);
 
@@ -48,10 +72,6 @@ $upload->getFile();
 $upload->getClientName();
 ```
 
-## Forms
-
-Use `Ruvents\UploadBundle\Form\Type\UploadType` with your upload entity. It is a compound form with a file field which is configured to use file's data as a constructor argument.
-
 ## Serving upload entity for downloading
 
 ```yaml
@@ -59,8 +79,18 @@ Use `Ruvents\UploadBundle\Form\Type\UploadType` with your upload entity. It is a
 download:
     prefix: /download
     resource: '@RuventsUploadBundle/Resources/config/download_route.yaml'
+    defaults:
+        entity: App\Entity\Upload
 ```
 
 ```twig
 <a href="{{ path('ruvents_upload_download', {path: upload.path}) }}">Download</a>
+```
+
+## Default configuration
+
+```yaml
+ruvents_upload:
+    web_dir: "%kernel.project_dir%/public"
+    uploads_dir: "uploads"
 ```
