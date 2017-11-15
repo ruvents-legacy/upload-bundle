@@ -16,14 +16,14 @@ abstract class AbstractUpload
      * @ORM\Column(name="id", type="string")
      * @ORM\Id()
      */
-    private $path = '';
+    protected $path = '';
 
     /**
      * @ORM\Column(type="string", nullable=true)
      *
      * @var null|string
      */
-    private $clientName;
+    protected $clientName;
 
     private $file;
 
