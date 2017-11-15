@@ -5,10 +5,8 @@ namespace Ruvents\UploadBundle\DependencyInjection;
 
 use Ruvents\UploadBundle\Controller\DownloadController;
 use Ruvents\UploadBundle\EventListener\UploadListener;
-use Ruvents\UploadBundle\Form\Type\UploadType;
 use Ruvents\UploadBundle\Serializer\UploadNormalizer;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\Serializer\Serializer;
 
@@ -33,19 +31,7 @@ class RuventsUploadExtension extends ConfigurableExtension
                 ->addTag('serializer.normalizer', ['priority' => -100]);
         }
 
-        if (class_exists(Form::class)) {
-            $container->register(UploadType::class)
-                ->setPublic(false)
-                ->setArguments([
-                    $config['entity'],
-                ])
-                ->addTag('form.type');
-        }
-
         $container->autowire(DownloadController::class)
-            ->setPublic(true)
-            ->setArguments([
-                '$entity' => $config['entity'],
-            ]);
+            ->setPublic(true);
     }
 }

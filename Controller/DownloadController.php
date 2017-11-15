@@ -13,24 +13,21 @@ class DownloadController
 {
     private $registry;
 
-    private $entity;
-
-    public function __construct(ManagerRegistry $registry, string $entity)
+    public function __construct(ManagerRegistry $registry)
     {
         $this->registry = $registry;
-        $this->entity = $entity;
     }
 
-    public function __invoke(string $path)
+    public function __invoke(string $entity, string $path)
     {
-        $manager = $this->registry->getManagerForClass($this->entity);
+        $manager = $this->registry->getManagerForClass($entity);
 
         if (null === $manager || !$manager instanceof EntityManagerInterface) {
-            throw new \RuntimeException(sprintf('Class %s is not a valid entity.', $this->entity));
+            throw new \RuntimeException(sprintf('Class %s is not a valid entity.', $entity));
         }
 
         /** @var null|AbstractUpload $upload */
-        $upload = $manager->find($this->entity, $path);
+        $upload = $manager->find($entity, $path);
 
         if (null === $upload) {
             throw new NotFoundHttpException();
