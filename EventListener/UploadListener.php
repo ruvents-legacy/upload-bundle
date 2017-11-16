@@ -55,7 +55,7 @@ class UploadListener implements EventSubscriber
             Events::prePersist,
             Events::preRemove,
             Events::postLoad,
-            Events::postFlush,
+            Events::onFlush,
         ];
     }
 
@@ -102,7 +102,7 @@ class UploadListener implements EventSubscriber
         }
     }
 
-    public function postFlush()
+    public function onFlush()
     {
         while ($upload = array_shift($this->persistedUploads)) {
             $file = $this->moveFile($upload->getFile(), $this->webDir.'/'.$upload->getPath());
