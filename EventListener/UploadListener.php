@@ -105,7 +105,7 @@ class UploadListener implements EventSubscriber
     public function onFlush()
     {
         while ($upload = array_shift($this->persistedUploads)) {
-            $file = $this->moveFile($upload->getFile(), $this->webDir.'/'.$upload->getPath());
+            $file = $this->copyFile($upload->getFile(), $this->webDir.'/'.$upload->getPath());
             $this->setValue($upload, 'file', $file);
         }
 
@@ -114,7 +114,7 @@ class UploadListener implements EventSubscriber
         }
     }
 
-    private function moveFile(File $file, string $target): File
+    private function copyFile(File $file, string $target): File
     {
         $directory = dirname($target);
         $name = basename($target);
