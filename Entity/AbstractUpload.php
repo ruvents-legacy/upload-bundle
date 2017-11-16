@@ -73,7 +73,7 @@ abstract class AbstractUpload
 
     public function __toString(): string
     {
-        return $this->path;
+        return (string)$this->clientName;
     }
 
     public function getPath(): string
