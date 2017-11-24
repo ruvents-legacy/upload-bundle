@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\MappedSuperclass()
@@ -39,6 +40,10 @@ abstract class AbstractUpload
     {
         if ($file instanceof File) {
             $this->file = $file;
+
+            if ($file instanceof UploadedFile) {
+                $this->clientName = $file->getClientOriginalName();
+            }
 
             return;
         }

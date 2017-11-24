@@ -76,10 +76,6 @@ class UploadListener implements EventSubscriber
         $this->setValue($entity, 'path', $path);
         $this->setValue($entity, 'url', $this->generateUrl($path));
 
-        if ($file instanceof UploadedFile) {
-            $this->setValue($entity, 'clientName', $file->getClientOriginalName());
-        }
-
         $this->persistedUploads[] = $entity;
     }
 
