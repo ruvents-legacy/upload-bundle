@@ -11,10 +11,17 @@ use Symfony\Component\Validator\Constraints\Composite;
  */
 class AssertUpload extends Composite
 {
-    /**
-     * @Required()
-     */
     public $constraints;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequiredOptions()
+    {
+        return [
+            'constraints',
+        ];
+    }
 
     /**
      * {@inheritdoc}
