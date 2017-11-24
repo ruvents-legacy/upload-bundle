@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace Ruvents\UploadBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -48,25 +49,22 @@ abstract class AbstractUpload
             return;
         }
 
-        throw new \InvalidArgumentException(sprintf('File must be a string, an instance of %s or an object with __toString method.', File::class));
+        throw new \InvalidArgumentException(sprintf('File must be a string, an instance of "%s" or an object with __toString method.', File::class));
     }
 
     /**
      * @param string $url
      *
      * @return static
-     * @throws FileException
+     *
+     * @throws IOException
      */
     public static function fromUrl($url)
     {
-        $target = rtrim(sys_get_temp_dir(), '/\\').DIRECTORY_SEPARATOR.sha1($url);
+        $filesystem = new Filesystem();
 
-        if (!@copy($url, $target)) {
-            throw new FileException(sprintf(
-                'Could not copy the file "%s" to "%s" (%s).',
-                $url, $target, strip_tags(error_get_last()['message'])
-            ));
-        }
+        $target = $filesystem->tempnam('ruvents_upload', sha1($url));
+        $filesystem->copy($url, $target);
 
         return new static($target);
     }
