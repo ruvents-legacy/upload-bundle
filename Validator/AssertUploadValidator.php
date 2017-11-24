@@ -19,17 +19,17 @@ class AssertUploadValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, AssertUpload::class);
         }
 
-        if (null === $value) {
+        if (null === $value || '' === $value) {
             return;
         }
 
-        if (!$value instanceof AbstractUpload) {
-            throw new UnexpectedTypeException($value, AbstractUpload::class);
+        if ($value instanceof AbstractUpload) {
+            $value = $value->getFile()->getPathname();
         }
 
         $this->context
             ->getValidator()
             ->inContext($this->context)
-            ->validate($value->getFile(), $constraint->constraints);
+            ->validate($value, $constraint->constraints);
     }
 }
