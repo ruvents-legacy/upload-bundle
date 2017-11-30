@@ -35,6 +35,7 @@ abstract class AbstractUploadType extends AbstractType implements DataMapperInte
                 'data_class' => AbstractUpload::class,
                 'empty_data' => null,
                 'error_bubbling' => false,
+                'error_mapping' => ['.' => 'file'],
             ]);
     }
 
