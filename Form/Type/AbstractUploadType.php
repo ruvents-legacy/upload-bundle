@@ -41,6 +41,14 @@ abstract class AbstractUploadType extends AbstractType implements DataMapperInte
     /**
      * {@inheritdoc}
      */
+    public function getBlockPrefix()
+    {
+        return 'ruvents_upload';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function mapDataToForms($data, $forms)
     {
     }
