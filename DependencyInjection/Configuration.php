@@ -16,14 +16,12 @@ class Configuration implements ConfigurationInterface
         return (new TreeBuilder())
             ->root('ruvents_upload')
                 ->children()
-                    ->scalarNode('web_dir')
+                    ->scalarNode('default_class')
+                        ->defaultNull()
+                    ->end()
+                    ->scalarNode('default_type')
                         ->cannotBeEmpty()
-                        ->defaultValue('%kernel.project_dir%/public')
-                        ->beforeNormalization()
-                            ->always(function ($value) {
-                                return rtrim($value, '/\\');
-                            })
-                        ->end()
+                        ->defaultNull()
                     ->end()
                     ->scalarNode('uploads_dir')
                         ->cannotBeEmpty()
@@ -31,6 +29,15 @@ class Configuration implements ConfigurationInterface
                         ->beforeNormalization()
                             ->always(function ($value) {
                                 return trim($value, '/\\');
+                            })
+                        ->end()
+                    ->end()
+                    ->scalarNode('web_dir')
+                        ->cannotBeEmpty()
+                        ->defaultValue('%kernel.project_dir%/public')
+                        ->beforeNormalization()
+                            ->always(function ($value) {
+                                return rtrim($value, '/\\');
                             })
                         ->end()
                     ->end()

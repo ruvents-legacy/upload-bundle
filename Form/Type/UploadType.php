@@ -11,8 +11,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractUploadType extends AbstractType implements DataMapperInterface
+class UploadType extends AbstractType implements DataMapperInterface
 {
+    private $class;
+
+    public function __construct(string $class)
+    {
+        $this->class = $class;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -67,5 +74,10 @@ abstract class AbstractUploadType extends AbstractType implements DataMapperInte
         }
     }
 
-    abstract protected function createUpload($file): AbstractUpload;
+    protected function createUpload($file): AbstractUpload
+    {
+        $class = $this->class;
+
+        return new $class($file);
+    }
 }
