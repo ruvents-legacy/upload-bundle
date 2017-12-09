@@ -3,21 +3,23 @@ declare(strict_types=1);
 
 namespace Ruvents\UploadBundle\Form\Type;
 
-use Ruvents\UploadBundle\Entity\AbstractUpload;
+use Ruvents\UploadBundle\Form\DataMapper\CallbackUploadFactory;
+use Ruvents\UploadBundle\Form\DataMapper\UploadDataMapper;
+use Ruvents\UploadBundle\Form\DataMapper\UploadFactoryInterface;
+use Ruvents\UploadBundle\UploadManager;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UploadType extends AbstractType implements DataMapperInterface
+class UploadType extends AbstractType
 {
-    private $class;
+    private $manager;
 
-    public function __construct(string $class)
+    public function __construct(UploadManager $manager)
     {
-        $this->class = $class;
+        $this->manager = $manager;
     }
 
     /**
@@ -26,10 +28,12 @@ class UploadType extends AbstractType implements DataMapperInterface
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', FileType::class, [
-                'label' => false,
+            ->add('uploadedFile', FileType::class, [
+                'mapped' => false,
             ])
-            ->setDataMapper($this);
+            ->setDataMapper(
+                new UploadDataMapper($this->manager, $options['factory'], $builder->getDataMapper())
+            );
     }
 
     /**
@@ -39,11 +43,19 @@ class UploadType extends AbstractType implements DataMapperInterface
     {
         $resolver
             ->setDefaults([
-                'data_class' => AbstractUpload::class,
                 'empty_data' => null,
-                'error_bubbling' => false,
-                'error_mapping' => ['.' => 'file'],
-            ]);
+            ])
+            ->setRequired([
+                'factory',
+            ])
+            ->setAllowedTypes('factory', ['callable', UploadFactoryInterface::class])
+            ->setNormalizer('factory', function (Options $options, $factory) {
+                if (is_callable($factory)) {
+                    $factory = new CallbackUploadFactory($factory);
+                }
+
+                return $factory;
+            });
     }
 
     /**
@@ -52,32 +64,5 @@ class UploadType extends AbstractType implements DataMapperInterface
     public function getBlockPrefix()
     {
         return 'ruvents_upload';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function mapDataToForms($data, $forms)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function mapFormsToData($forms, &$data)
-    {
-        /** @var FormInterface $fileForm */
-        $fileForm = iterator_to_array($forms)['file'];
-
-        if (!$fileForm->isEmpty() && $fileForm->isSubmitted() && $fileForm->isSynchronized()) {
-            $data = $this->createUpload($fileForm->getData());
-        }
-    }
-
-    protected function createUpload($file): AbstractUpload
-    {
-        $class = $this->class;
-
-        return new $class($file);
     }
 }

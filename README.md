@@ -1,6 +1,6 @@
 # RUVENTS Upload Bundle
 
-This bundle provides an immutable upload entity implementation.
+This bundle provides an upload entity implementation.
 
 ## Installation
 
@@ -11,65 +11,95 @@ This bundle provides an immutable upload entity implementation.
 1. Create your upload entity.
     ```php
     <?php
-    
+
     namespace App\Entity;
-    
+
     use Doctrine\ORM\Mapping as ORM;
+    use Ruvents\UploadBundle\Download\DownloadInterface;
     use Ruvents\UploadBundle\Entity\AbstractUpload;
-    
+    use Symfony\Component\HttpFoundation\File\UploadedFile;
+
     /**
      * @ORM\Entity()
      */
-    class Upload extends AbstractUpload
+    class Upload extends AbstractUpload implements DownloadInterface
     {
-    }
-   ```
+        /**
+         * @ORM\Column(type="string", nullable=true)
+         *
+         * @var null|string
+         */
+        private $name;
 
-1. Create the corresponding form type.
-    ```php
-    <?php
-    
-    namespace App\Form\Type;
-    
-    use App\Entity\Upload;
-    use Ruvents\UploadBundle\Entity\AbstractUpload;
-    use Ruvents\UploadBundle\Form\Type\AbstractUploadType;
-    
-    class UploadType extends AbstractUploadType
-    {
+        public function __construct(UploadedFile $uploadedFile, string $path)
+        {
+            parent::__construct($uploadedFile, $path);
+            $this->name = $uploadedFile->getClientOriginalName();
+        }
+
         /**
          * {@inheritdoc}
          */
-        protected function createUpload($file): AbstractUpload
+        public function getDownloadName(): string
         {
-            return new Upload($file);
+            return $this->name ?: basename($this->getPath());
         }
     }
-    ```
+   ```
 
 ## Basic usage
 
 ```php
 <?php
 
+namespace App\Controller;
+
 use App\Entity\Upload;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Ruvents\UploadBundle\Form\Type\UploadType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 
-$upload = new Upload('path/to/file' /** or File instance */);
+class IndexController extends AbstractController
+{
+    /**
+     * @Route("", name="index")
+     * @Template()
+     */
+    public function indexAction(Request $request, EntityManagerInterface $em)
+    {
+        $user = new User();
 
-/** @var $em EntityManagerInterface */
-$em->persist($upload);
-$em->flush();
+        $builder = $this->createFormBuilder($user)
+            ->add('upload', UploadType::class, [
+                'factory' => function (UploadedFile $file, string $path) {
+                    return new Upload($file, $path);
+                },
+            ])
+            ->add('submit', SubmitType::class);
 
-// path relative to {web_dir}/{uploads_dir}
-$upload->getPath();
-// full url based on master request or request context
-$upload->getUrl();
-// an instance of Symfony\Component\HttpFoundation\File\File
-$upload->getFile();
-// client name of a file (only if Upload was created from an UploadedFile)
-// Symfony\Component\HttpFoundation\File\UploadedFile::getClientOriginalName()
-$upload->getClientName();
+        $form = $builder
+            ->getForm()
+            ->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($user);
+            $em->flush();
+
+            return $this->redirectToRoute('index');
+        }
+
+        return [
+            'user' => $user,
+            'form' => $form->createView(),
+        ];
+    }
+}
 ```
 
 ## Serving upload entity for downloading
@@ -80,7 +110,7 @@ download:
     prefix: /download
     resource: '@RuventsUploadBundle/Resources/config/download_route.yaml'
     defaults:
-        entity: App\Entity\Upload
+        class: App\Entity\Upload
 ```
 
 ```twig
@@ -91,6 +121,6 @@ download:
 
 ```yaml
 ruvents_upload:
-    web_dir: "%kernel.project_dir%/public"
-    uploads_dir: "uploads"
+    public_dir: "%kernel.project_dir%/public"
+    uploads_dir_name: uploads
 ```

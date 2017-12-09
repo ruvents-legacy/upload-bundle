@@ -14,12 +14,10 @@ class ReplaceTwigAssetExtensionPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has($name = 'twig.extension.assets')) {
-            return;
+        if ($container->has($name = 'twig.extension.assets')) {
+            $container
+                ->findDefinition($name)
+                ->setClass(AssetExtension::class);
         }
-
-        $container
-            ->findDefinition($name)
-            ->setClass(AssetExtension::class);
     }
 }

@@ -8,28 +8,31 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
-class AssertUploadValidator extends ConstraintValidator
+class UploadFileValidator extends ConstraintValidator
 {
     /**
      * {@inheritdoc}
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$constraint instanceof AssertUpload) {
-            throw new UnexpectedTypeException($constraint, AssertUpload::class);
+        if (!$constraint instanceof UploadFile) {
+            throw new UnexpectedTypeException($constraint, UploadFile::class);
         }
 
-        if (null === $value || '' === $value) {
+        if (null === $value) {
             return;
         }
 
-        if ($value instanceof AbstractUpload) {
-            $value = $value->getFile()->getPathname();
+        if (!$value instanceof AbstractUpload) {
+            throw new UnexpectedTypeException($value, AbstractUpload::class);
         }
+
+        $file = $value->getUploadedFile() ?? $value->getPath();
 
         $this->context
             ->getValidator()
             ->inContext($this->context)
-            ->validate($value, $constraint->constraints);
+            ->atPath('uploadedFile')
+            ->validate($file, $constraint->constraints);
     }
 }

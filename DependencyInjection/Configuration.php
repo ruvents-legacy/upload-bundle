@@ -5,6 +5,7 @@ namespace Ruvents\UploadBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Form\FormTypeInterface;
 
 class Configuration implements ConfigurationInterface
 {
@@ -16,29 +17,21 @@ class Configuration implements ConfigurationInterface
         return (new TreeBuilder())
             ->root('ruvents_upload')
                 ->children()
-                    ->scalarNode('default_class')
-                        ->defaultNull()
-                    ->end()
-                    ->scalarNode('default_type')
-                        ->cannotBeEmpty()
-                        ->defaultNull()
-                    ->end()
-                    ->scalarNode('uploads_dir')
-                        ->cannotBeEmpty()
-                        ->defaultValue('uploads')
-                        ->beforeNormalization()
-                            ->always(function ($value) {
-                                return trim($value, '/\\');
-                            })
-                        ->end()
-                    ->end()
-                    ->scalarNode('web_dir')
+                    ->scalarNode('public_dir')
                         ->cannotBeEmpty()
                         ->defaultValue('%kernel.project_dir%/public')
-                        ->beforeNormalization()
-                            ->always(function ($value) {
-                                return rtrim($value, '/\\');
+                    ->end()
+                    ->scalarNode('uploads_dir_name')
+                        ->cannotBeEmpty()
+                        ->defaultValue('uploads')
+                    ->end()
+                    ->scalarNode('default_form_type')
+                        ->defaultNull()
+                        ->validate()
+                            ->ifTrue(function ($class) {
+                                return !is_subclass_of($class, FormTypeInterface::class);
                             })
+                            ->thenInvalid('"%s" must implement '.FormTypeInterface::class)
                         ->end()
                     ->end()
                 ->end()

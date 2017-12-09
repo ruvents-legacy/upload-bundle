@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace Ruvents\UploadBundle\DependencyInjection;
 
-use Ruvents\UploadBundle\Controller\DownloadController;
-use Ruvents\UploadBundle\EventListener\UploadListener;
-use Ruvents\UploadBundle\Form\Type\UploadType;
 use Ruvents\UploadBundle\Form\TypeGuesser\UploadTypeGuesser;
 use Ruvents\UploadBundle\Serializer\UploadNormalizer;
-use Ruvents\UploadBundle\Validator\AssertUploadValidator;
+use Ruvents\UploadBundle\UploadManager;
+use Ruvents\UploadBundle\Validator\UploadFileValidator;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RuventsUploadExtension extends ConfigurableExtension
 {
@@ -21,54 +21,26 @@ class RuventsUploadExtension extends ConfigurableExtension
      */
     public function loadInternal(array $config, ContainerBuilder $container)
     {
-        $container->autowire(UploadListener::class)
-            ->setPublic(false)
-            ->setArguments([
-                '$webDir' => $config['web_dir'],
-                '$uploadsDir' => $config['uploads_dir'],
-            ])
-            ->addTag('doctrine.event_subscriber');
+        (new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config')))
+            ->load('services.php');
 
-        if (null !== $defaultClass = $config['default_class']) {
-            $container->register(UploadType::class)
-                ->setPublic(false)
-                ->addTag('form.type')
-                ->setArguments([
-                    '$class' => $config['default_class'],
-                ]);
+        $container->getDefinition(UploadManager::class)
+            ->setArgument('$publicDir', $config['public_dir'])
+            ->setArgument('$uploadsDirName', $config['uploads_dir_name']);
 
-            if (null === $config['default_type']) {
-                $this->registerTypeGuesser($container, UploadType::class);
-            }
+        if (null !== $config['default_form_type']) {
+            $container->findDefinition(UploadTypeGuesser::class)
+                ->setArgument('$type', $config['default_form_type']);
+        } else {
+            $container->removeDefinition(UploadTypeGuesser::class);
         }
 
-        if (null !== $config['default_type']) {
-            $this->registerTypeGuesser($container, $config['default_type']);
+        if (!interface_exists(ValidatorInterface::class)) {
+            $container->removeDefinition(UploadFileValidator::class);
         }
 
-        if (class_exists(Serializer::class)) {
-            $container->register(UploadNormalizer::class)
-                ->setPublic(false)
-                ->addTag('serializer.normalizer', ['priority' => -100]);
+        if (!interface_exists(NormalizerInterface::class)) {
+            $container->removeDefinition(UploadNormalizer::class);
         }
-
-        if (class_exists(Constraint::class)) {
-            $container->register(AssertUploadValidator::class)
-                ->setPublic(false)
-                ->addTag('validator.constraint_validator');
-        }
-
-        $container->autowire(DownloadController::class)
-            ->setPublic(true);
-    }
-
-    private function registerTypeGuesser(ContainerBuilder $container, string $type)
-    {
-        $container->autowire(UploadTypeGuesser::class)
-            ->setPublic(false)
-            ->addTag('form.type_guesser')
-            ->setArguments([
-                '$type' => $type,
-            ]);
     }
 }

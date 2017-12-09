@@ -9,9 +9,17 @@ use Symfony\Component\Validator\Constraints\Composite;
  * @Annotation()
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */
-class AssertUpload extends Composite
+class UploadFile extends Composite
 {
     public $constraints;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validatedBy()
+    {
+        return UploadFileValidator::class;
+    }
 
     /**
      * {@inheritdoc}

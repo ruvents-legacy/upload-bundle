@@ -11,13 +11,13 @@ use Symfony\Component\Form\Guess;
 
 class UploadTypeGuesser implements FormTypeGuesserInterface
 {
-    private $registry;
+    private $doctrine;
 
     private $type;
 
-    public function __construct(ManagerRegistry $registry, string $type)
+    public function __construct(ManagerRegistry $doctrine, string $type)
     {
-        $this->registry = $registry;
+        $this->doctrine = $doctrine;
         $this->type = $type;
     }
 
@@ -26,7 +26,9 @@ class UploadTypeGuesser implements FormTypeGuesserInterface
      */
     public function guessType($class, $property)
     {
-        if (!$manager = $this->registry->getManagerForClass($class)) {
+        $manager = $this->doctrine->getManagerForClass($class);
+
+        if (null === $manager) {
             return null;
         }
 
