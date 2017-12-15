@@ -1,12 +1,12 @@
 <?php
 
-namespace Ruvents\UploadBundle\Controller;
+namespace Ruwork\UploadBundle\Controller;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
-use Ruvents\UploadBundle\Download\DownloadInterface;
-use Ruvents\UploadBundle\Entity\AbstractUpload;
-use Ruvents\UploadBundle\UploadManager;
+use Ruwork\UploadBundle\Download\DownloadInterface;
+use Ruwork\UploadBundle\Entity\AbstractUpload;
+use Ruwork\UploadBundle\UploadManager;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

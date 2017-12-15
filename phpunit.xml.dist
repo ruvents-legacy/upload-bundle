@@ -12,7 +12,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Ruvents Upload Bundle Test Suite">
+        <testsuite name="Ruwork Upload Bundle Test Suite">
             <directory>./Tests</directory>
         </testsuite>
     </testsuites>

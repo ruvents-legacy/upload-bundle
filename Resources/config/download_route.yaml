@@ -1,6 +1,6 @@
-ruvents_upload_download:
+ruwork_upload_download:
     path: /{path}
     defaults:
-        _controller: Ruvents\UploadBundle\Controller\DownloadController
+        _controller: Ruwork\UploadBundle\Controller\DownloadController
     requirements:
         path: '[a-zA-Z/-_]+(.[a-zA-Z-_]+)?'

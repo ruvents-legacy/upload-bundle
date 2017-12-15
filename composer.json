@@ -1,6 +1,6 @@
 {
-    "name": "ruvents/upload-bundle",
-    "description": "RUVENTS Upload Bundle",
+    "name": "ruwork/upload-bundle",
+    "description": "Ruwork Upload Bundle",
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
@@ -24,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Ruvents\\UploadBundle\\": ""
+            "Ruwork\\UploadBundle\\": ""
         },
         "exclude-from-classmap": [
             "/Tests/"

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle\Twig\Extension;
+namespace Ruwork\UploadBundle\Twig\Extension;
 
-use Ruvents\UploadBundle\Entity\AbstractUpload;
+use Ruwork\UploadBundle\Entity\AbstractUpload;
 use Symfony\Bridge\Twig\Extension\AssetExtension as BaseAssetExtension;
 
 class AssetExtension extends BaseAssetExtension

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle\Download;
+namespace Ruwork\UploadBundle\Download;
 
 interface DownloadInterface
 {

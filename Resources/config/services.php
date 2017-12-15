@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Ruvents\UploadBundle\Controller\DownloadController;
-use Ruvents\UploadBundle\EventListener\UploadDoctrineListener;
-use Ruvents\UploadBundle\Form\Type\UploadType;
-use Ruvents\UploadBundle\Form\TypeGuesser\UploadTypeGuesser;
-use Ruvents\UploadBundle\Serializer\UploadNormalizer;
-use Ruvents\UploadBundle\UploadManager;
-use Ruvents\UploadBundle\Validator\UploadFileValidator;
+use Ruwork\UploadBundle\Controller\DownloadController;
+use Ruwork\UploadBundle\EventListener\UploadDoctrineListener;
+use Ruwork\UploadBundle\Form\Type\UploadType;
+use Ruwork\UploadBundle\Form\TypeGuesser\UploadTypeGuesser;
+use Ruwork\UploadBundle\Serializer\UploadNormalizer;
+use Ruwork\UploadBundle\UploadManager;
+use Ruwork\UploadBundle\Validator\UploadFileValidator;
 
 return function (ContainerConfigurator $container) {
     $services = $container->services()

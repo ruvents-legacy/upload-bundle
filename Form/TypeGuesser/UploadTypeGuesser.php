@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle\Form\TypeGuesser;
+namespace Ruwork\UploadBundle\Form\TypeGuesser;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Ruvents\UploadBundle\Entity\AbstractUpload;
+use Ruwork\UploadBundle\Entity\AbstractUpload;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormTypeGuesserInterface;
 use Symfony\Component\Form\Guess;

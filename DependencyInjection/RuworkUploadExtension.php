@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle\DependencyInjection;
+namespace Ruwork\UploadBundle\DependencyInjection;
 
-use Ruvents\UploadBundle\Form\TypeGuesser\UploadTypeGuesser;
-use Ruvents\UploadBundle\Serializer\UploadNormalizer;
-use Ruvents\UploadBundle\UploadManager;
-use Ruvents\UploadBundle\Validator\UploadFileValidator;
+use Ruwork\UploadBundle\Form\TypeGuesser\UploadTypeGuesser;
+use Ruwork\UploadBundle\Serializer\UploadNormalizer;
+use Ruwork\UploadBundle\UploadManager;
+use Ruwork\UploadBundle\Validator\UploadFileValidator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class RuventsUploadExtension extends ConfigurableExtension
+class RuworkUploadExtension extends ConfigurableExtension
 {
     /**
      * {@inheritdoc}

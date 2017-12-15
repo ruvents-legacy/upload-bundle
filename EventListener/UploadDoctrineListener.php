@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle\EventListener;
+namespace Ruwork\UploadBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
-use Ruvents\UploadBundle\Entity\AbstractUpload;
-use Ruvents\UploadBundle\UploadManager;
+use Ruwork\UploadBundle\Entity\AbstractUpload;
+use Ruwork\UploadBundle\UploadManager;
 
 class UploadDoctrineListener implements EventSubscriber
 {

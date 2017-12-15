@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle\DependencyInjection\Compiler;
+namespace Ruwork\UploadBundle\DependencyInjection\Compiler;
 
-use Ruvents\UploadBundle\Twig\Extension\AssetExtension;
+use Ruwork\UploadBundle\Twig\Extension\AssetExtension;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

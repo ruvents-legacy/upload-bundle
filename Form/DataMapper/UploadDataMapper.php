@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle\Form\DataMapper;
+namespace Ruwork\UploadBundle\Form\DataMapper;
 
-use Ruvents\UploadBundle\Entity\AbstractUpload;
-use Ruvents\UploadBundle\UploadManager;
+use Ruwork\UploadBundle\Entity\AbstractUpload;
+use Ruwork\UploadBundle\UploadManager;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;

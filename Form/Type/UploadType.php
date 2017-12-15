@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle\Form\Type;
+namespace Ruwork\UploadBundle\Form\Type;
 
-use Ruvents\UploadBundle\Form\DataMapper\CallbackUploadFactory;
-use Ruvents\UploadBundle\Form\DataMapper\UploadDataMapper;
-use Ruvents\UploadBundle\Form\DataMapper\UploadFactoryInterface;
-use Ruvents\UploadBundle\UploadManager;
+use Ruwork\UploadBundle\Form\DataMapper\CallbackUploadFactory;
+use Ruwork\UploadBundle\Form\DataMapper\UploadDataMapper;
+use Ruwork\UploadBundle\Form\DataMapper\UploadFactoryInterface;
+use Ruwork\UploadBundle\UploadManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -63,6 +63,6 @@ class UploadType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'ruvents_upload';
+        return 'ruwork_upload';
     }
 }

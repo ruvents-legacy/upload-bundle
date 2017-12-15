@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle;
+namespace Ruwork\UploadBundle;
 
-use Ruvents\UploadBundle\Entity\AbstractUpload;
+use Ruwork\UploadBundle\Entity\AbstractUpload;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RequestContext;
 

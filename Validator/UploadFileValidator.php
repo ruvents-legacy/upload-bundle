@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle\Validator;
+namespace Ruwork\UploadBundle\Validator;
 
-use Ruvents\UploadBundle\Entity\AbstractUpload;
+use Ruwork\UploadBundle\Entity\AbstractUpload;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;

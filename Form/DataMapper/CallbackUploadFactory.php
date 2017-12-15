@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle\Form\DataMapper;
+namespace Ruwork\UploadBundle\Form\DataMapper;
 
-use Ruvents\UploadBundle\Entity\AbstractUpload;
+use Ruwork\UploadBundle\Entity\AbstractUpload;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CallbackUploadFactory implements UploadFactoryInterface

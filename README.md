@@ -1,10 +1,10 @@
-# RUVENTS Upload Bundle
+# Ruwork Upload Bundle
 
 This bundle provides an upload entity implementation.
 
 ## Installation
 
-`composer require ruvents/upload-bundle`.
+`composer require ruwork/upload-bundle`.
 
 ## Getting started
 
@@ -15,8 +15,8 @@ This bundle provides an upload entity implementation.
     namespace App\Entity;
 
     use Doctrine\ORM\Mapping as ORM;
-    use Ruvents\UploadBundle\Download\DownloadInterface;
-    use Ruvents\UploadBundle\Entity\AbstractUpload;
+    use Ruwork\UploadBundle\Download\DownloadInterface;
+    use Ruwork\UploadBundle\Entity\AbstractUpload;
     use Symfony\Component\HttpFoundation\File\UploadedFile;
 
     /**
@@ -57,7 +57,7 @@ namespace App\Controller;
 use App\Entity\Upload;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Ruvents\UploadBundle\Form\Type\UploadType;
+use Ruwork\UploadBundle\Form\Type\UploadType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -108,19 +108,19 @@ class IndexController extends AbstractController
 # config/routes.yaml
 download:
     prefix: /download
-    resource: '@RuventsUploadBundle/Resources/config/download_route.yaml'
+    resource: '@RuworkUploadBundle/Resources/config/download_route.yaml'
     defaults:
         class: App\Entity\Upload
 ```
 
 ```twig
-<a href="{{ path('ruvents_upload_download', {path: upload.path}) }}">Download</a>
+<a href="{{ path('ruwork_upload_download', {path: upload.path}) }}">Download</a>
 ```
 
 ## Default configuration
 
 ```yaml
-ruvents_upload:
+ruwork_upload:
     public_dir: "%kernel.project_dir%/public"
     uploads_dir_name: uploads
 ```

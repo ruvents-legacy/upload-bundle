@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle\Entity;
+namespace Ruwork\UploadBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Ruvents\UploadBundle;
+namespace Ruwork\UploadBundle;
 
-use Ruvents\UploadBundle\DependencyInjection\Compiler\ReplaceTwigAssetExtensionPass;
+use Ruwork\UploadBundle\DependencyInjection\Compiler\ReplaceTwigAssetExtensionPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class RuventsUploadBundle extends Bundle
+class RuworkUploadBundle extends Bundle
 {
     /**
      * {@inheritdoc}
